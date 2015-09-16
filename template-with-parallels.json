@@ -4,7 +4,6 @@
       "vcs": true
     },
     "variables": {
-        "atlas_token": "",
         "atlas_username": "",
         "atlas_name": ""
     },
@@ -15,6 +14,7 @@
                 "scripts/base.sh",
                 "scripts/virtualbox.sh",
                 "scripts/vmware.sh",
+                "scripts/parallels.sh",
                 "scripts/vagrant.sh",
                 "scripts/dep.sh",
                 "scripts/cleanup.sh",
@@ -84,7 +84,39 @@
             "ssh_wait_timeout": "10000s",
             "shutdown_command": "echo '/sbin/halt -h -p' > shutdown.sh; echo 'vagrant'|sudo -S bash 'shutdown.sh'",
             "tools_upload_flavor": "linux"
-        }],
+        }, {
+            "type": "parallels-iso",
+            "boot_command": [
+                "<esc><esc><enter><wait>",
+                "/install/vmlinuz noapic preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg ",
+                "debian-installer=en_US auto locale=en_US kbd-chooser/method=us ",
+                "hostname={{ .Name }} ",
+                "fb=false debconf/frontend=noninteractive ",
+                "keyboard-configuration/modelcode=SKIP keyboard-configuration/layout=USA keyboard-configuration/variant=USA console-setup/ask_detect=false ",
+                "initrd=/install/initrd.gz -- <enter>"
+            ],
+            "boot_wait": "10s",
+            "disk_size": 20480,
+            "guest_os_type": "ubuntu",
+            "headless": true,
+            "http_directory": "http",
+            "iso_checksum": "a3b345908a826e262f4ea1afeb357fd09ec0558cf34e6c9112cead4bb55ccdfb",
+            "iso_checksum_type": "sha256",
+            "iso_url": "http://releases.ubuntu.com/14.04.3/ubuntu-14.04.3-server-amd64.iso",
+            "ssh_username": "vagrant",
+            "ssh_password": "vagrant",
+            "ssh_port": 22,
+            "ssh_wait_timeout": "10000s",
+            "shutdown_command": "echo '/sbin/halt -h -p' > shutdown.sh; echo 'vagrant'|sudo -S bash 'shutdown.sh'",
+            "parallels_tools_mode": "upload",
+            "parallels_tools_flavor": "lin",
+            "parallels_tools_guest_path": "prl-tools.iso",
+            "prlctl": [
+                ["set", "{{.Name}}", "--memsize", "2048"],
+                ["set", "{{.Name}}", "--cpus", "4"]
+            ]
+        }
+    ],
     "post-processors": [
         [{
             "type": "vagrant",
@@ -92,7 +124,6 @@
         },
         {
             "type": "atlas",
-            "token": "{{user `atlas_token`}}",
             "only": ["vmware-iso"],
             "artifact": "{{user `atlas_username`}}/{{user `atlas_name`}}",
             "artifact_type": "vagrant.box",
@@ -103,7 +134,6 @@
         },
         {
             "type": "atlas",
-            "token": "{{user `atlas_token`}}",
             "only": ["virtualbox-iso"],
             "artifact": "{{user `atlas_username`}}/{{user `atlas_name`}}",
             "artifact_type": "vagrant.box",
