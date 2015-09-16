@@ -14,8 +14,9 @@
             "type": "shell",
             "scripts": [
                 "scripts/base.sh",
-                "scripts/virtualbox.sh",
                 "scripts/vmware.sh",
+                "scripts/virtualbox.sh",
+                "scripts/parallels.sh",
                 "scripts/vagrant.sh",
                 "scripts/dep.sh",
                 "scripts/cleanup.sh",
@@ -100,10 +101,10 @@
                 "keyboard-configuration/modelcode=SKIP keyboard-configuration/layout=USA keyboard-configuration/variant=USA console-setup/ask_detect=false ",
                 "initrd=/install/initrd.gz -- <enter>"
             ],
+            "headless": true,
             "boot_wait": "10s",
             "disk_size": 20480,
             "guest_os_type": "ubuntu",
-            "headless": true,
             "http_directory": "http",
             "iso_checksum": "a3b345908a826e262f4ea1afeb357fd09ec0558cf34e6c9112cead4bb55ccdfb",
             "iso_checksum_type": "sha256",
