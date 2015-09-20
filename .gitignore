@@ -1,4 +1,5 @@
 # packer
 packer_cache/
+output-*-iso/
 *.box
 secret.json
